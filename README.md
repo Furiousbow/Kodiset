@@ -123,6 +123,16 @@ PORT=5173 BASE_PATH=/ npm exec --yes pnpm@10 -- --filter @workspace/kodiset run 
 
 Open `http://localhost:5173`.
 
+## GitHub Pages
+
+The React frontend is configured to deploy automatically from `main` through GitHub Actions. After the workflow completes, it is available at:
+
+```text
+https://furiousbow.github.io/Kodiset/
+```
+
+GitHub Pages hosts the static frontend only. GitHub OAuth, email login, PostgreSQL profiles, contribution workspaces, and AI requests still require the Express API to be deployed separately and configured through `VITE_API_URL`. The Pages build is therefore useful for previewing the interface, but it is not a complete production deployment by itself.
+
 The API health endpoint is:
 
 ```text
