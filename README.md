@@ -2,7 +2,7 @@
 
 Kodiset helps developers find a realistic first open-source contribution. Give it a public GitHub repository and a short skills check. It reads the repository, checks issue availability and project health, then creates a contribution guide matched to the developer's level.
 
-The project is the local Kodiset contribution planner frontend plus a workspace API and PostgreSQL-backed account system.
+The project is a standalone Kodiset contribution planner with a React frontend, Express API, and PostgreSQL-backed account system.
 
 ## What It Does
 
@@ -32,12 +32,12 @@ lib/
   api-client-react/ Generated API client package
 ```
 
-The upstream Clover implementation remains the product reference. This workspace uses its existing Kodiset frontend direction while keeping the repository's pnpm monorepo and TypeScript API structure.
+This repository is the Kodiset project. It uses a pnpm workspace monorepo and TypeScript across the frontend, API, database, and shared packages.
 
 ## Requirements
 
 - Node.js 20 or newer
-- pnpm 10 or newer
+- Node.js 20 or newer is enough to run the included pnpm commands through `npm exec`.
 - PostgreSQL 14 or newer
 - A GitHub OAuth application for GitHub login
 - A Gemini API key for AI-generated explanations and plans
@@ -45,7 +45,7 @@ The upstream Clover implementation remains the product reference. This workspace
 ## Install
 
 ```bash
-pnpm install
+npm exec --yes pnpm@10 -- install
 ```
 
 ## Environment Setup
@@ -95,7 +95,7 @@ Copy the client ID and client secret into the API environment file. The callback
 Create the PostgreSQL database named in `DATABASE_URL`, then apply the Drizzle schema:
 
 ```bash
-pnpm --filter @workspace/db push
+npm exec --yes pnpm@10 -- --filter @workspace/db push
 ```
 
 The schema creates:
@@ -112,13 +112,13 @@ Passwords are stored as salted scrypt hashes. Raw passwords are never stored. Se
 Start the API:
 
 ```bash
-pnpm --filter @workspace/api-server run dev
+npm exec --yes pnpm@10 -- --filter @workspace/api-server run dev
 ```
 
 Start the frontend in another terminal:
 
 ```bash
-PORT=5173 BASE_PATH=/ pnpm --filter @workspace/kodiset run dev
+PORT=5173 BASE_PATH=/ npm exec --yes pnpm@10 -- --filter @workspace/kodiset run dev
 ```
 
 Open `http://localhost:5173`.
@@ -151,20 +151,20 @@ The frontend sends credentials with requests so the HTTP-only session cookie is 
 
 ```bash
 # Typecheck the whole workspace
-pnpm run typecheck
+npm exec --yes pnpm@10 -- run typecheck
 
 # Build the frontend
-PORT=5173 BASE_PATH=/ pnpm --filter @workspace/kodiset run build
+PORT=5173 BASE_PATH=/ npm exec --yes pnpm@10 -- --filter @workspace/kodiset run build
 
 # Build the API bundle
-pnpm --filter @workspace/api-server run build
+npm exec --yes pnpm@10 -- --filter @workspace/api-server run build
 
 # Typecheck one package
-pnpm --filter @workspace/kodiset run typecheck
-pnpm --filter @workspace/api-server run typecheck
+npm exec --yes pnpm@10 -- --filter @workspace/kodiset run typecheck
+npm exec --yes pnpm@10 -- --filter @workspace/api-server run typecheck
 
 # Rebuild database declarations
-pnpm exec tsc -b lib/db --force
+npm exec --yes pnpm@10 -- exec tsc -b lib/db --force
 ```
 
 ## Product Notes
@@ -190,4 +190,4 @@ The current implementation is designed for public GitHub repositories. GitHub ra
 
 ## Branch Policy
 
-Development work for this implementation is on `sub-develop`. The `main` branch is not used for these changes. Pushes should be reviewed before merging into the main product branch.
+The public Kodiset repository uses `main` as its default branch. Keep secrets out of commits and review changes before deploying them.
