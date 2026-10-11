@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Kodiset"
+description = "A guided open-source contribution planner that helps developers find one suitable GitHub issue, understand the project, and make a contribution they can explain."
+version = "1.0.0"
+id = "artifacts/kodiset"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20771
+
+[services.development]
+run = "pnpm --filter @workspace/kodiset run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/kodiset", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/kodiset/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20771"
+BASE_PATH = "/"
